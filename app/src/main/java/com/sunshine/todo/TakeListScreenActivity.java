@@ -7,11 +7,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TakeListScreenActivity extends AppCompatActivity {
-    public ArrayList<ToDo> toDoLists;
+    public ArrayList<ToDo> toDoLists = new ArrayList<>();
     public RecyclerView listsRv;
     public ToDoAdapter toDoAdapter;
 
@@ -20,9 +26,32 @@ public class TakeListScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_list_screen);
         getSupportActionBar().setTitle("Task List");
-        setupData();
         setupToDoListRecyclerView();
         setupAddButton();
+        }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchData();
+    }
+
+    private void fetchData() {
+       ToDoApi toDoApi = new ToDoApi();
+       ToDoServices toDoServices = toDoApi.createTodoServices();
+        Call<List<ToDo>> call = toDoServices.fetchTasks();
+        call.enqueue(new Callback<List<ToDo>>() {
+            @Override
+            public void onResponse(Call<List<ToDo>> call, Response<List<ToDo>> response) {
+                List<ToDo> tasks = response.body();
+                toDoAdapter.setData(tasks);
+            }
+
+            @Override
+            public void onFailure(Call<List<ToDo>> call, Throwable t) {
+                Toast.makeText(TakeListScreenActivity.this, "failed to load data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupAddButton() {
@@ -39,28 +68,5 @@ public class TakeListScreenActivity extends AppCompatActivity {
         toDoAdapter = new ToDoAdapter();
         toDoAdapter.setData(toDoLists);
         listsRv.setAdapter(toDoAdapter);
-    }
-
-    private void setupData() {
-       toDoLists = new ArrayList<>();
-       ToDo getVegetables = new ToDo();
-       getVegetables.task = "Get Vegetables";
-       getVegetables.taskDescription = "for 1 week";
-       toDoLists.add(getVegetables);
-
-       ToDo readingNews = new ToDo();
-       readingNews.task = "Reading News";
-       readingNews.taskDescription ="Explore politics, flimy and sport news";
-       toDoLists.add(readingNews);
-
-       ToDo prepareLunch = new ToDo();
-       prepareLunch.task = "Prepare Lunch";
-       prepareLunch.taskDescription = "Briyani and Raitha.Yummyyy";
-       toDoLists.add(prepareLunch);
-
-       ToDo haveBreakfast = new ToDo();
-       haveBreakfast.task = "Have BreakFast";
-       haveBreakfast.taskDescription = "Healthy Breakfast for Better Morning";
-       toDoLists.add(haveBreakfast);
     }
 }

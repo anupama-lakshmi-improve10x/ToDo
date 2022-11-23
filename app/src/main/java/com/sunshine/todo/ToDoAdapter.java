@@ -8,12 +8,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
 
-    public ArrayList<ToDo> toDoArray;
+    public List<ToDo> toDoArray;
 
-    public void setData(ArrayList<ToDo> toDoArrayList){
+    public void setData(List<ToDo> toDoArrayList){
         toDoArray = toDoArrayList;
         notifyDataSetChanged();
     }
