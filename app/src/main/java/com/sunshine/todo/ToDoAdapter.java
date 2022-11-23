@@ -13,10 +13,15 @@ import java.util.List;
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
 
     public List<ToDo> toDoArray;
+    public OnItemActionListener onItemActionListener;
 
     public void setData(List<ToDo> toDoArrayList){
         toDoArray = toDoArrayList;
         notifyDataSetChanged();
+    }
+
+    public void setOnItemActionListener(OnItemActionListener actionListener){
+        onItemActionListener = actionListener;
     }
 
 
@@ -33,6 +38,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
         ToDo toDo = toDoArray.get(position);
         holder.taskTxt.setText(toDo.task);
         holder.descriptionTxt.setText(toDo.taskDescription);
+        holder.deleteBtn.setOnClickListener(view -> {
+            onItemActionListener.onDelete(toDo.id);
+        });
     }
 
     @Override

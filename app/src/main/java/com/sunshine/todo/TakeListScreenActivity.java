@@ -30,6 +30,24 @@ public class TakeListScreenActivity extends AppCompatActivity {
         setupAddButton();
         }
 
+        public void deleteTask(String id){
+            ToDoApi toDoApi = new ToDoApi();
+            ToDoServices toDoServices = toDoApi.createTodoServices();
+            Call<Void> call = toDoServices.deleteTask(id);
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Toast.makeText(TakeListScreenActivity.this, "Sucessfully deleted", Toast.LENGTH_SHORT).show();
+                    fetchData();
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(TakeListScreenActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
     @Override
     protected void onResume() {
         super.onResume();
@@ -68,5 +86,17 @@ public class TakeListScreenActivity extends AppCompatActivity {
         toDoAdapter = new ToDoAdapter();
         toDoAdapter.setData(toDoLists);
         listsRv.setAdapter(toDoAdapter);
+        toDoAdapter.setOnItemActionListener(new OnItemActionListener() {
+            @Override
+            public void onEdit(ToDo toDo) {
+
+            }
+
+            @Override
+            public void onDelete(String id) {
+                deleteTask(id);
+
+            }
+        });
     }
 }
