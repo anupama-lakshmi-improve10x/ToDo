@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="ToDO"
+            android:text="ToDo"
             android:textColor="#1491F4"
             android:textSize="34sp" />
     </LinearLayout>

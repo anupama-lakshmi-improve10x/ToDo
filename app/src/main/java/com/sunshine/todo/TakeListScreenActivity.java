@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ public class TakeListScreenActivity extends AppCompatActivity {
     public RecyclerView listsRv;
     public ToDoAdapter toDoAdapter;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +31,7 @@ public class TakeListScreenActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Task List");
         setupToDoListRecyclerView();
         setupAddButton();
+
         }
 
         public void deleteTask(String id){
@@ -80,6 +84,13 @@ public class TakeListScreenActivity extends AppCompatActivity {
         });
     }
 
+    public void editTask(ToDo toDo){
+        Intent intent = new Intent(this, AddTaskScreenActivity.class);
+        intent.putExtra("toDo", toDo);
+        startActivity(intent);
+
+    }
+
     private void setupToDoListRecyclerView() {
         listsRv = findViewById(R.id.list_rv);
         listsRv.setLayoutManager(new LinearLayoutManager(this));
@@ -89,13 +100,12 @@ public class TakeListScreenActivity extends AppCompatActivity {
         toDoAdapter.setOnItemActionListener(new OnItemActionListener() {
             @Override
             public void onEdit(ToDo toDo) {
-
+                editTask(toDo);
             }
 
             @Override
             public void onDelete(String id) {
                 deleteTask(id);
-
             }
         });
     }
